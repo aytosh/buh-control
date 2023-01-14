@@ -4,4 +4,4 @@ Buh-Control
 
 
 
-[![build-project-time](https://github.com/ituniqteam/buh-control/actions/workflows/main.yml/badge.svg)](https://github.com/ituniqteam/buh-control/actions/workflows/main.yml)
+[![build-project-time](https://github.com/ituniqteam/buh-control/actions/workflows/main.yml/badge.svg)](https://github.com/ituniqteam/buh-control/actions/workflows/main.yml) 
