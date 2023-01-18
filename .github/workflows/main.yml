@@ -21,20 +21,20 @@ jobs:
       - uses: AutoModality/action-clean@v1   
       - uses: actions/checkout@v2
     
-      - name: Stop tutor-usa_web_1 container
+      - name: Stop buh-control_web_1 container
         run: | 
-            docker stop tutor-usa_web_1 
-      - name: Stop tutorial-usa_db_1 container
+            docker stop buh-control_web_1
+      - name: Stop buh-control_db_1 container
         run: | 
-           docker stop tutor-usa_db_1
+           docker stop buh-control_db_1
           
-      - name: Delete tutor-usa_db_1 container
+      - name: Delete buh-control_web_1 container
         run: |
-          docker rm tutor-usa_web_1 
+          docker rm buh-control_web_1
           
-      - name: Delete tutor-usa_db_1 container
+      - name: Delete buh-control_db_1 container
         run: |
-           docker rm tutor-usa_db_1
+           docker rm buh-control_db_1
             
       - name: Makemigrations
         run: |
