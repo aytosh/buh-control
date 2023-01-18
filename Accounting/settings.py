@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-(i5p!^hb%ej0vt0la(rkjd(m3ti%$dw7$^##&c)s8zh!egwq=s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -75,8 +75,12 @@ WSGI_APPLICATION = 'Accounting.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres1',
+        'USER': 'postgres1',
+        'PASSWORD': 'postgres1',
+        'HOST': 'db',
+        'PORT': 5432
     }
 }
 
@@ -118,6 +122,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'static'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
