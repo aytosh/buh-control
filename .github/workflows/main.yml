@@ -2,10 +2,7 @@ name: build-project-time
 
 on:
   push:
-    branches: 
-      - main
-      - devops
-      
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -16,37 +13,41 @@ jobs:
 
     steps:
     
+    
 #       - name: cleanup
 #         run : |
-#           sudo chown -R $USER:$USER $GITHUB_WORKSPACE          
-        
-        
-      - uses: actions/checkout@v2  
+#           sudo chown -R $USER:$USER $GITHUB_WORKSPACE 
 
-      - name: Stop main container
+      - uses: AutoModality/action-clean@v1   
+      - uses: actions/checkout@v2
+    
+      - name: Stop tutor-usa_web_1 container
         run: | 
-          docker stop tutorial-usa_web_1 \
-          docker stop tutorial-usa_db_1 \
-
-      - name: Docker-compose up
-        run : |
-          docker-compose up -d
-         
-      - name: Collectstatic
-        run : |
-          docker exec -it container_id python3 manage.py collectstatic
+            docker stop tutor-usa_web_1 
+      - name: Stop tutorial-usa_db_1 container
+        run: | 
+           docker stop tutor-usa_db_1
           
+      - name: Delete tutor-usa_db_1 container
+        run: |
+          docker rm tutor-usa_web_1 
+          
+      - name: Delete tutor-usa_db_1 container
+        run: |
+           docker rm tutor-usa_db_1
+            
       - name: Makemigrations
-        run : | 
-          docker exec -it container_id python3 manage.py makemigrations
-          
-#       - name: Createsuperuser
-#         run : |
-#           docker exec -it container_id python3 manage.py createsuperuser
+        run: |
+          docker-compose run web python3 manage.py makemigrations
           
       - name: Migrate
-        run : |
-          docker exec -it container_id python3 manage.py migrate
-
-
-
+        run: |
+          docker-compose run web python3 manage.py migrate
+          
+      - name: Collectstatic
+        run: |
+          docker-compose run web python3 manage.py collectstatic 
+          
+      - name: Run Docker-Compose
+        run: |
+          docker-compose up -d
