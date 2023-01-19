@@ -18,7 +18,7 @@ jobs:
 #         run : |
 #           sudo chown -R $USER:$USER $GITHUB_WORKSPACE 
 
-      - uses: AutoModality/action-clean@v1   
+#       - uses: AutoModality/action-clean@v1   
       - uses: actions/checkout@v2
     
       - name: Stop buh-control_web_1 container
