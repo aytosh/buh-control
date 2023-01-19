@@ -39,13 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_createsuperuser',
     'account',
-<<<<<<< HEAD
     'student',
     'session',
 
-=======
-   
->>>>>>> 4708ae99f84a50131a927f23db234992021eee79
+
     'rest_framework',
     'django_filters',
     'drf_yasg',
