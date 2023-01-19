@@ -7,11 +7,11 @@ For more information on this file, see
 https://docs.djangoproject.com/en/3.2/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/3.2/ref/settings/
+https://docs.djangoproject.com/en/3.2/ref/settings/ 
 """
 import os
 from pathlib import Path
-
+ 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
-# Application definition
+# Application definition 
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,9 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_createsuperuser',
     'account',
+<<<<<<< HEAD
     'student',
     'session',
 
+=======
+   
+>>>>>>> 4708ae99f84a50131a927f23db234992021eee79
     'rest_framework',
     'django_filters',
     'drf_yasg',

@@ -48,6 +48,10 @@ jobs:
         run: |
           docker-compose run web python3 manage.py collectstatic 
           
+#       - name: Createsuperuser
+#         run: |
+#           docker-compose run web python3 manage.py createsuperuser --noinput 
+          
       - name: Run Docker-Compose
         run: |
           docker-compose up -d
