@@ -7,12 +7,19 @@ services:
       - ./data
     environment:
       - POSTGRES_DB=postgres1
-      - POSTGRES_USER=postgres1 
+      - POSTGRES_USER=postgres1
       - POSTGRES_PASSWORD=postgres1
-  web: 
+  web:
     build: .
+    entrypoint: bash -c
+    tty: true
+    command: python3 manage.py createsuperuser --noinput
+    environment:
+      - DJANGO_SUPERUSER_PASSWORD=demo
+      - DJANGO_SUPERUSER_USERNAME=demo
+      - DJANGO_SUPERUSER_EMAIL=demo@gmail.com
     command: python3 manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
     depends_on:
-      - db 
+      - db
