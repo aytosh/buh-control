@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_createsuperuser',
     'account',
-
+   
     'rest_framework',
     'django_filters',
     'drf_yasg',
