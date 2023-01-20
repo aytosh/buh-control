@@ -8,7 +8,7 @@ from .serializers import *
 
 
 
-# class RegisterView(APIView):
+# student_class RegisterView(APIView):
 #     def post(self, request):
 #         data = request.data
 #         serializer = RegisterSerializer(data=data)
@@ -18,7 +18,7 @@ from .serializers import *
 #                       f'Вам отправлено письмо с активацией'
 #             return Response(message, status=201)
 
-# class ActivationView(APIView):
+# student_class ActivationView(APIView):
 #     def post(self, request):
 #         data = request.data
 #         serializer = ActivationSerializer(data=data)
@@ -40,7 +40,7 @@ class LogoutView(APIView):
         return Response('Successfully logged out')
 
 
-# class ChangePasswordView(APIView):
+# student_class ChangePasswordView(APIView):
 #     permission_classes = [IsAuthenticated]
 #
 #     def post(self, request):
@@ -51,7 +51,7 @@ class LogoutView(APIView):
 #         return Response('Пароль успешно обновлён')
 #
 
-# class ForgotPasswordView(APIView):
+# student_class ForgotPasswordView(APIView):
 #     def post(self, request):
 #         data = request.data
 #         serializer = ForgotPasswordSerializer(data=data)
@@ -59,7 +59,7 @@ class LogoutView(APIView):
 #         serializer.send_code()
 #         return Response('Вам отправлено письмо для восстовления пароля')
 
-# class ForgotPasswordCompleteView(APIView):
+# student_class ForgotPasswordCompleteView(APIView):
 #     def post(self, request):
 #         data = request.data
 #         serializer = ForgetPasswordCompleteSerializer(data=data)

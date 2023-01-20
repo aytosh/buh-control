@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account',
     'student',
     'session',
+    'student_class',
 
 
     'rest_framework',

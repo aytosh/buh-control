@@ -6,7 +6,7 @@ from rest_framework import serializers
 User = get_user_model()
 
 
-# class RegisterSerializer(serializers.Serializer):
+# student_class RegisterSerializer(serializers.Serializer):
 #     email = serializers.EmailField(required=True)
 #     name = serializers.CharField(required=False)
 #     password = serializers.CharField(required=True, min_length=6)
@@ -32,7 +32,7 @@ User = get_user_model()
 #         return user
 
 
-# class ActivationSerializer(serializers.Serializer):
+# student_class ActivationSerializer(serializers.Serializer):
 #     email = serializers.EmailField(required=True)
 #     code = serializers.CharField(min_length=8, max_length=8)
 #
@@ -84,7 +84,7 @@ class LoginSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
-# class ChangePasswordSerializer(serializers.Serializer):
+# student_class ChangePasswordSerializer(serializers.Serializer):
 #     old_pass = serializers.CharField(required=True)
 #     password = serializers.CharField(required=True, min_length=6)
 #     password_confirm = serializers.CharField(required=True, min_length=6)
@@ -109,7 +109,7 @@ class LoginSerializer(serializers.Serializer):
 #         user.save()
 
 
-# class ForgotPasswordSerializer(serializers.Serializer):
+# student_class ForgotPasswordSerializer(serializers.Serializer):
 #     email = serializers.EmailField(required=True)
 #
 #     def validate_email(self, email):
@@ -128,7 +128,7 @@ class LoginSerializer(serializers.Serializer):
 #             [email]
 #         )
 
-# class ForgetPasswordCompleteSerializer(serializers.Serializer):
+# student_class ForgetPasswordCompleteSerializer(serializers.Serializer):
 #     email = serializers.EmailField(required=True)
 #     # code = serializers.CharField(min_length=8, max_length=8, required=True)
 #     password = serializers.CharField(required=True)
