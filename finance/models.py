@@ -1,37 +1,284 @@
 from django.db import models
-from student.models import Student
+from staff.models import Staff
+class Cashbox(models.Model):
+    amount_usd = models.FloatField(
+        default=0,
+        verbose_name="amount usd"
+    )
+    amount_kgz = models.FloatField(
+        default=0,
+        verbose_name="amount kgz"
+    )
+    total_income = models.FloatField(
+        default=0,
+        verbose_name="total income"
+    )
+    total_expenses = models.FloatField(
+        default=0,
+        verbose_name="total expenses"
+    )
 
-# implement function with cashbox
-
-class Discount(models.Model):
+class IncomeCategory(models.Model):
+    slug = models.SlugField(
+        primary_key=True,
+        unique=True,
+        verbose_name="slug"
+    )
     title = models.TextField(
         blank=False,
+        null=False,
+        verbose_name="title"
+    )
+
+    def __str__(self):
+        return f"{self.slug}"
+
+    class Meta:
+        verbose_name = "Income category"
+        verbose_name_plural = "Income categories"
+
+class ExpensesCategory(models.Model):
+    slug = models.SlugField(
+        primary_key=True,
+        unique=True,
+        verbose_name="slug"
+    )
+    title = models.TextField(
+        blank=False,
+        null=False,
+        verbose_name="title"
+    )
+
+    def __str__(self):
+        return f"{self.slug}"
+
+    class Meta:
+        verbose_name = "Expense category"
+        verbose_name_plural = "Expense categories"
+
+class Income(models.Model):
+    date = models.DateTimeField(
+        auto_now_add=True,
+        auto_now=False,
+        blank=False,
+        null=False,
+        verbose_name="date"
+    )
+    income_category = models.ForeignKey(
+        IncomeCategory,
+        on_delete=models.CASCADE,
+        blank=True,
         null=True,
+        related_name="incomes",
+        verbose_name="income category"
+    )
+    amount_usd = models.FloatField(
+        blank=True,
+        null=True,
+        verbose_name="amount usd"
+    )
+    amount_kgz = models.FloatField(
+        blank=True,
+        null=True,
+        verbose_name="amount kgz"
+    )
+    rate = models.FloatField(
+        blank=True,
+        null=True,
+        verbose_name="rate"
+    )
+    note = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name="note"
+    )
+    who_accepted = models.ForeignKey(
+        Staff,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="incomes",
+        verbose_name="who accepted"
+    )
+
+    def count_income(self):
+        if self.amount_usd:
+            cashbox = Cashbox.objects.get(pk=1)
+            cashbox.total_income += self.amount_usd
+            cashbox.amount_usd += self.amount_usd
+            cashbox.save()
+
+        elif self.rate and self.amount_kgz:
+            cashbox = Cashbox.objects.get(pk=1)
+            amount_usd = self.rate * self.amount_kgz
+            cashbox.total_income += amount_usd
+            cashbox.amount_kgz += self.amount_kgz
+            cashbox.save()
+
+    def __str__(self):
+        return f"{self.income_category}"
+
+    class Meta:
+        verbose_name = "Income"
+        verbose_name_plural = "Income"
+
+
+class Expenses(models.Model):
+    date = models.DateTimeField(
+        auto_now_add=True,
+        auto_now=False,
+        blank=False,
+        null=False,
+        verbose_name="date"
+    )
+    expenses_category = models.ForeignKey(
+        ExpensesCategory,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="expenses",
+        verbose_name="expenses category"
+    )
+    amount_usd = models.FloatField(
+        blank=True,
+        null=True,
+        verbose_name="amount usd"
+    )
+    amount_kgz = models.FloatField(
+        blank=True,
+        null=True,
+        verbose_name="amount kgz"
+    )
+    rate = models.FloatField(
+        blank=True,
+        null=True,
+        verbose_name="rate"
+    )
+    note = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name="note"
+    )
+    who_accepted = models.ForeignKey(
+        Staff,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="expenses",
+        verbose_name="who accepted"
+    )
+
+    def count_expenses(self):
+        if self.amount_usd:
+            cashbox = Cashbox.objects.get(pk=1)
+            cashbox.total_expenses += self.amount_usd
+            cashbox.amount_usd -= self.amount_usd
+            cashbox.save()
+        elif self.rate and self.amount_kgz:
+            cashbox = Cashbox.objects.get(pk=1)
+            amount_usd = self.rate * self.amount_kgz
+            cashbox.total_expenses += amount_usd
+            cashbox.amount_kgz -= self.amount_kgz
+            cashbox.save()
+
+    def __str__(self):
+        return f"{self.slug}"
+
+    class Meta:
+        verbose_name = "Expenses"
+        verbose_name_plural = "Expenses"
+
+class Accrual(models.Model):
+    amount_usd = models.FloatField(
+        blank=True,
+        null=True,
+        verbose_name="amount usd"
+    )
+    amount_kgz = models.FloatField(
+        blank=True,
+        null=True,
+        verbose_name="amount kgz"
+    )
+
+    note = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name="note"
+    )
+    date = models.DateTimeField(
+        auto_now_add=True,
+        auto_now=False,
+        blank=False,
+        null=False,
+        verbose_name="date"
+    )
+
+    def count_accrual(self):
+        if self.amount_usd:
+            cashbox = Cashbox.objects.get(pk=1)
+            cashbox.amount_usd += self.amount_usd
+            cashbox.save()
+
+        elif self.amount_kgz:
+            cashbox = Cashbox.objects.get(pk=1)
+            cashbox.amount_kgz += self.amount_kgz
+            cashbox.save()
+
+    def __str__(self):
+        return f"{self.slug}"
+
+    class Meta:
+        verbose_name = "Accrual"
+        verbose_name_plural = "Accrual"
+
+class SalaryCategory(models.Model):
+    slug = models.SlugField(
+        primary_key=True,
+        unique=True,
+        verbose_name="slug"
+    )
+    title = models.TextField(
+        blank=False,
+        null=False,
         verbose_name="title"
     )
     amount_usd = models.FloatField(
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         verbose_name="amount usd"
     )
 
     def __str__(self):
-        return f"{self.title}-{self.amount_usd}"
+        return f"{self.slug}"
 
     class Meta:
-        verbose_name = "Discount"
-        verbose_name_plural = "Discounts"
+        verbose_name = "Salary category"
+        verbose_name_plural = "Salary categories"
 
-
-class FeeCategory(models.Model):
-    title = models.TextField(
+class SalaryPayment(models.Model):
+    date = models.DateTimeField(
+        auto_now_add=True,
+        auto_now=False,
         blank=False,
         null=False,
-        verbose_name="title"
+        verbose_name="date"
+    )
+    full_name = models.TextField(
+        blank=False,
+        null=False,
+        verbose_name="full name"
+    )
+    salary_category = models.ForeignKey(
+        SalaryCategory,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="salaries",
+        verbose_name="salary category"
     )
     amount_usd = models.FloatField(
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         verbose_name="amount usd"
     )
     note = models.TextField(
@@ -39,194 +286,25 @@ class FeeCategory(models.Model):
         null=True,
         verbose_name="note"
     )
-
-    def __str__(self):
-        return f"{self.title}-{self.amount}"
-
-    class Meta:
-        verbose_name = "Fee category"
-        verbose_name_plural = "Fee categories"
-
-class Fee(models.Model):
-    student = models.ForeignKey(
-        Student,
+    staff = models.ForeignKey(
+        Staff,
         on_delete=models.CASCADE,
-        related_name="fees",
-        verbose_name="student"
-    )
-    fee_category = models.ForeignKey(
-        FeeCategory,
-        on_delete=models.CASCADE,
-        related_name="fees",
-        verbose_name="fee category"
-    )
-    discount = models.ForeignKey(
-        Discount,
-        on_delete=models.CASCADE,
-        related_name="fees",
-        verbose_name="discount"
-    )
-    payment_usd = models.FloatField(verbose_name="payment amount")
-    payment_usd_left = models.FloatField(verbose_name="payment left")
-    paid = models.FloatField(verbose_name="paid")
-
-    def count_payment(self):
-        discount_amount = 0
-        if self.discount:
-            discount_amount = self.discount.amount_usd
-        payment_amount = self.fee_category.amount_usd
-        self.payment_usd = payment_amount - discount_amount
-        self.payment_usd_left = payment_amount - discount_amount
-        self.paid = 0
-
-    def __str__(self):
-        return f"{self.student.first_name} {self.student.last_name}-{self.fee_category.title}"
-
-    class Meta:
-        verbose_name = "Fee"
-        verbose_name_plural = "Fees"
-
-class PaymentPlan(models.Model):
-    student = models.ForeignKey(
-        Student,
-        on_delete=models.CASCADE,
-        related_name="payment_plans",
-        verbose_name="student"
-    )
-    fee = models.ForeignKey(
-        Fee,
-        on_delete=models.CASCADE,
-        related_name="payment_plans",
-        verbose_name="fee"
-    )
-    date = models.DateField(
-        blank=False,
-        null=False,
-        verbose_name="date"
-    )
-    amount = models.FloatField(
-        blank=False,
-        null=False,
-        verbose_name="amount"
-    )
-
-    def __str__(self):
-        return f"{self.date}-{self.amount}"
-
-    class Meta:
-        verbose_name = "Payment plan"
-        verbose_name_plural = "Payment plans"
-
-class PaymentCategory(models.Model):
-    slug = models.SlugField(
-        primary_key=True,
-        unique=True,
-        max_length="200",
-        verbose_name="slug"
-    )
-    title = models.TextField(
-        blank=False,
-        null=False,
-        verbose_name="title"
-    )
-    def __str__(self):
-        return f"{self.slug}"
-
-    class Meta:
-        verbose_name = "Payment category"
-        verbose_name_plural = "Payments categories"
-
-
-
-class PaymentType(models.Model):
-    slug = models.SlugField(
-        primary_key=True,
-        unique=True,
-        max_length="200",
-        verbose_name="slug"
-    )
-    title = models.TextField(
-        blank=False,
-        null=False,
-        verbose_name="title"
-    )
-    def __str__(self):
-        return f"{self.slug}"
-
-    class Meta:
-        verbose_name = "Payment"
-        verbose_name_plural = "Payments"
-
-class Payment(models.Model):
-    student = models.ForeignKey(
-        Student,
-        on_delete=models.CASCADE,
-        related_name="payments",
-        verbose_name="student"
-    )
-    fee = models.ForeignKey(
-        Fee,
-        on_delete=models.CASCADE,
-        related_name="payments",
-        verbose_name="fee"
-    )
-    payment_category = models.ForeignKey(
-        PaymentCategory,
-        on_delete=models.CASCADE,
-        related_name="payments",
-        verbose_name="payment category"
-    )
-    payment_type = models.ForeignKey(
-        PaymentType,
-        on_delete=models.CASCADE,
-        related_name="payments",
-        verbose_name="payment type"
-    )
-    amount_usd = models.FloatField(
         blank=True,
         null=True,
-        verbose_name="amount usd"
-    )
-    rate = models.FloatField(
-        blank=True,
-        null=True,
-        verbose_name="rate"
-    )
-    amount_kgz = models.FloatField(
-        blank=True,
-        null=True,
-        verbose_name="amount usd"
-    )
-    who_paid = models.TextField(
-        blank=False,
-        null=False,
-        verbose_name="who paid"
-    )
-    date = models.DateTimeField(
-        auto_now_add=True,
-        auto_now=True,
-    )
-    note = models.TextField(
-        blank=True,
-        null=True,
-        verbose_name="date"
+        related_name="salary_payments",
+        verbose_name="who accepted"
     )
 
-    def count_payment(self):
+    def count_salary(self):
         if self.amount_usd:
-            self.fee.payment_usd_left -= self.amount_usd
-            self.fee.paid += self.amount_usd
+            cashbox = Cashbox.objects.get(pk=1)
+            cashbox.amount_usd -= self.amount_usd
+            cashbox.save()
 
-        elif self.amount_kgz:
-            if self.rate:
-                self.amount_usd = self.amount_kgz * self.rate
-                self.fee.payment_usd_left -= self.amount_usd
-                self.fee.paid += self.amount_usd
+    def __str__(self):
+        return f"{self.full_name}"
 
-
-
-
-
-
-
+    class Meta:
+        verbose_name = "Salary payment"
+        verbose_name_plural = "Salary payments"
 

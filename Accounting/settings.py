@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'student',
     'session',
     'student_class',
+    'fee',
+    'finance',
+    'staff',
 
 
     'rest_framework',

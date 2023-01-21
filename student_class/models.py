@@ -2,16 +2,15 @@ from django.db import models
 from session.models import Session
 # Create your models here.
 class ClassCategory(models.Model):
+    slug = models.SlugField(
+        default="b",
+        primary_key=True,
+        verbose_name="slug"
+    )
     title = models.CharField(
         max_length=100,
         blank=False,
         verbose_name="title"
-    )
-    slug = models.SlugField(
-        max_length=100,
-        unique=True,
-        primary_key=True,
-        verbose_name="slug"
     )
 
     def __str__(self):
