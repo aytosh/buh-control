@@ -119,3 +119,4 @@ class FamilyMember(models.Model):
     class Meta:
         verbose_name = "Family member"
         verbose_name_plural = "Family members"
+
