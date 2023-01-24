@@ -107,13 +107,17 @@ class Income(models.Model):
             cashbox.total_income += self.amount_usd
             cashbox.amount_usd += self.amount_usd
             cashbox.save()
+            return True
 
-        elif self.rate and self.amount_kgz:
+        elif self.rate and self.amount_kgz and self.amount_usd:
             cashbox = Cashbox.objects.get(pk=1)
-            amount_usd = self.rate * self.amount_kgz
-            cashbox.total_income += amount_usd
+            cashbox.total_income += self.amount_usd
             cashbox.amount_kgz += self.amount_kgz
             cashbox.save()
+            return True
+
+        else:
+            return False
 
     def __str__(self):
         return f"{self.income_category}"
@@ -174,15 +178,18 @@ class Expenses(models.Model):
             cashbox.total_expenses += self.amount_usd
             cashbox.amount_usd -= self.amount_usd
             cashbox.save()
-        elif self.rate and self.amount_kgz:
+            return True
+        elif self.rate and self.amount_kgz and self.amount_usd:
             cashbox = Cashbox.objects.get(pk=1)
-            amount_usd = self.rate * self.amount_kgz
-            cashbox.total_expenses += amount_usd
+            cashbox.total_expenses += self.amount_usd
             cashbox.amount_kgz -= self.amount_kgz
             cashbox.save()
+            return True
+        else:
+            return False
 
     def __str__(self):
-        return f"{self.slug}"
+        return f"{self.expenses_category}"
 
     class Meta:
         verbose_name = "Expenses"
@@ -224,8 +231,12 @@ class Accrual(models.Model):
             cashbox.amount_kgz += self.amount_kgz
             cashbox.save()
 
+        else:
+            raise serializers.ValidationError("please fill out required fields!")
+
+
     def __str__(self):
-        return f"{self.slug}"
+        return f"{self.pk}"
 
     class Meta:
         verbose_name = "Accrual"
@@ -300,6 +311,10 @@ class SalaryPayment(models.Model):
             cashbox = Cashbox.objects.get(pk=1)
             cashbox.amount_usd -= self.amount_usd
             cashbox.save()
+            return True
+        else:
+            raise serializers.ValidationError("please fill out required fields!")
+
 
     def __str__(self):
         return f"{self.full_name}"

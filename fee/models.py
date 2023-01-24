@@ -40,7 +40,7 @@ class FeeCategory(models.Model):
     )
 
     def __str__(self):
-        return f"{self.title}-{self.amount}"
+        return f"{self.title}-{self.amount_usd}"
 
     class Meta:
         verbose_name = "Fee category"
@@ -65,9 +65,18 @@ class Fee(models.Model):
         related_name="fees",
         verbose_name="discount"
     )
-    payment_usd = models.FloatField(verbose_name="payment amount")
-    payment_usd_left = models.FloatField(verbose_name="payment left")
-    paid = models.FloatField(verbose_name="paid")
+    payment_usd = models.FloatField(
+        verbose_name="payment amount",
+        default=0
+    )
+    payment_usd_left = models.FloatField(
+        verbose_name="payment left",
+        default=0
+    )
+    paid = models.FloatField(
+        verbose_name="paid",
+        default=0
+    )
 
     def count_payment(self):
         discount_amount = 0
@@ -77,7 +86,7 @@ class Fee(models.Model):
         self.payment_usd = payment_amount - discount_amount
         self.payment_usd_left = payment_amount - discount_amount
         self.paid = 0
-
+        return True
     def __str__(self):
         return f"{self.student.first_name} {self.student.last_name}-{self.fee_category.title}"
 
@@ -153,8 +162,8 @@ class PaymentType(models.Model):
         return f"{self.slug}"
 
     class Meta:
-        verbose_name = "Payment"
-        verbose_name_plural = "Payments"
+        verbose_name = "Payment type"
+        verbose_name_plural = "Payment types"
 
 class Payment(models.Model):
     student = models.ForeignKey(
@@ -207,7 +216,7 @@ class Payment(models.Model):
     note = models.TextField(
         blank=True,
         null=True,
-        verbose_name="date"
+        verbose_name="note"
     )
 
     def count_payment(self):
@@ -220,8 +229,9 @@ class Payment(models.Model):
             cashbox.save()
             self.fee.save()
             self.save()
+            return True
 
-        elif self.amount_usd and not (self.amount_kgz and self.rate):
+        elif self.amount_usd and not self.amount_kgz and not self.rate:
             self.fee.payment_usd_left -= self.amount_usd
             self.fee.paid += self.amount_usd
             cashbox = Cashbox.objects.get(pk=1)
@@ -230,6 +240,23 @@ class Payment(models.Model):
             cashbox.save()
             self.fee.save()
             self.save()
+            return True
+
+        elif self.amount_kgz and self.rate and not self.amount_usd:
+            amount_usd = self.amount_kgz // self.rate
+            self.fee.payment_usd_left -= amount_usd
+            self.fee.paid += amount_usd
+            cashbox = Cashbox.objects.get(pk=1)
+            cashbox.amount_kgz += self.amount_kgz
+            cashbox.total_income += amount_usd
+            cashbox.save()
+            self.amount_usd = amount_usd
+            self.fee.save()
+            self.save()
+            return True
+        else:
+            return False
+
 
 
 

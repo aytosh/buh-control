@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission
 from staff.models import Staff
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 class IsActivePermission(BasePermission):
 
@@ -34,5 +35,21 @@ class IsAdminorIsAccountant(BasePermission):
     def has_permission(self, request, view):
         user = request.user
         staff = Staff.objects.get(user=user)
-        if staff.position == "staff" or user.is_staff:
+        if staff.position == "accountant" or user.is_staff:
             return True
+
+class PermissionMixinAdmin:
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            permissions = [IsAdminUser, ]
+        else:
+            permissions = [IsAuthenticated, ]
+        return [permission() for permission in permissions]
+
+class PermissionMixinAdminAccountant:
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            permissions = [IsAdminorIsAccountant, ]
+        else:
+            permissions = [IsAuthenticated, ]
+        return [permission() for permission in permissions]

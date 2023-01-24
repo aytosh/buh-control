@@ -8,6 +8,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include("account.urls")),
     path('session/', include('session.urls')),
+    path('fee/', include('fee.urls')),
+    path('student/', include('student.urls')),
+    path('class/', include('student_class.urls')),
+    path('session/', include('session.urls')),
+    path('staff/', include('staff.urls')),
+    path('finance/', include('finance.urls')),
+
 ]
 
 urlpatterns += doc_urls

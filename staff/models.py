@@ -155,7 +155,7 @@ class Staff(models.Model):
         max_length=50,
         blank=False,
         null=False,
-        verbose_name="specialty"
+        verbose_name="position"
     )
     photo = models.ImageField(
         upload_to='media/student_images',
@@ -206,7 +206,7 @@ class Staff(models.Model):
         Specilaty,
         on_delete=models.CASCADE,
         related_name="staff",
-        verbose_name="nationality",
+        verbose_name="specialty",
         blank=False,
         null=False
     )

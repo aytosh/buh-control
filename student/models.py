@@ -2,12 +2,12 @@ from django.db import models
 from student_class.models import Class
 from session.models import Session
 class Student(models.Model):
-    GENDER_CHOICES = (("male", "male"), ("feamle", "female"))
+    GENDER_CHOICES = (("male", "male"), ("female", "female"))
     STATUS_CHOICES = (("graduated", "graduated"),
                       ("out of", "out of"),
                       ("not confirmed", "not confirmed"),
                       ("active", "active"),
-                      ("pre-registered", "pre-refistered"))
+                      ("pre-registered", "pre-registered"))
     student_id = models.CharField(
         max_length=30,
         verbose_name="student's id"
@@ -57,9 +57,29 @@ class Student(models.Model):
         Session,
         on_delete=models.CASCADE,
         related_name="students",
-        verbose_name="academic year"
+        verbose_name="admission year"
     )
 
+    def create_student_id(self):
+        import datetime
+        today = datetime.date.today()
+        year = today.year
+        year = str(year)[2::]
+        class_title = self.class_id.class_category.title
+        if class_title in ["русский", "нулевой", "russian", "nulevoy"]:
+            lang = "2"
+        elif class_title in ["кыргызский", "kyrgyz"]:
+            lang = "1"
+        else:
+            lang = "0"
+        pk = str(self.pk)
+        if len(pk) == 1:
+            pk = "00" + pk
+        elif len(pk) == 2:
+            pk = "0" + pk
+        student_id = "62" + str(year) + lang + pk
+        self.student_id = student_id
+        self.save()
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
@@ -72,7 +92,7 @@ class FamilyMember(models.Model):
         Student,
         on_delete=models.CASCADE,
         related_name="family_members",
-        verbose_name="family member"
+        verbose_name="student"
     )
     fullname = models.TextField(
         blank=False,

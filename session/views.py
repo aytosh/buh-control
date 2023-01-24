@@ -1,11 +1,10 @@
-from django.shortcuts import render
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework import viewsets
 from .models import Session
 from .serializers import SessionSerializer
+from account.permissions import PermissionMixinAdmin
 # Create your views here.
-
-class SessionListView(generics.ListAPIView):
-    permission_classes = [IsAdminUser, ]
+class SessionViewset(PermissionMixinAdmin, viewsets.ModelViewSet):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
+
+
