@@ -1,10 +1,13 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from rest_framework.response import Response
 from .serializers import *
 from .models import *
+from .service import LargeResultPagination
+from django_filters.rest_framework import DjangoFilterBackend
 from staff.models import Staff
 from account.permissions import PermissionMixinAdmin, PermissionMixinAdminAccountant
+
 
 class FamilyMemberViewset(PermissionMixinAdminAccountant, viewsets.ModelViewSet):
     queryset = FamilyMember.objects.all()
@@ -13,6 +16,11 @@ class FamilyMemberViewset(PermissionMixinAdminAccountant, viewsets.ModelViewSet)
 class StudentViewset(PermissionMixinAdminAccountant, viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    pagination_class = LargeResultPagination
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
+    search_fields = ['first_name', 'last_name', 'patronymic', 'student_id', 'admission_year__slug']
+    filterset_fields = ['status', 'gender', 'admission_year']
+    ordering_fields = '__all__'
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

@@ -20,23 +20,16 @@ class MaritalStatusAdmin(admin.ModelAdmin):
     list_display_link = ('slug', 'title')
     search_fields = ('staff', 'title')
 
-class StaffcontactinfoinLine(admin.TabularInline):
-    model = StaffContactInfo
-    fields = ()
-    extra = 1
 class StaffAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'position', 'specialty')
     list_display_link = ('first_name', 'last_name', 'position', 'specialty')
     list_filter = ('position', 'specialty', 'status')
     search_fields = ('first_name', 'last_name')
-    inlines = [
-        StaffcontactinfoinLine
-    ]
-class StaffContactInfoAdmin(admin.ModelAdmin):
-    list_display = ('staff', 'email', 'phone_number')
-    list_display_link = ('staff', 'email', 'phone_number')
-    search_fields = ('staff', )
 
+class StaffContactInfoAdmin(admin.ModelAdmin):
+    list_display = ('user', 'email', 'phone_number')
+    list_display_link = ('user', 'email', 'phone_number')
+    search_fields = ('user', )
 
 
 admin.site.register(Nationality, NationalityAdmin)
@@ -45,4 +38,3 @@ admin.site.register(Citizenship, CitizenshipAdmin)
 admin.site.register(Specilaty, SpecialtyAdmin)
 admin.site.register(Staff, StaffAdmin)
 admin.site.register(StaffContactInfo, StaffContactInfoAdmin)
-

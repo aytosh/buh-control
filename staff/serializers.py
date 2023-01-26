@@ -23,9 +23,11 @@ class SpecialtySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StaffContactInfoSerializer(serializers.ModelSerializer):
+    # user = serializers.ReadOnlyField()
     class Meta:
         model = StaffContactInfo
         fields = '__all__'
+
 
 class StaffSerializer(serializers.ModelSerializer):
     class Meta:

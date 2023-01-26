@@ -26,17 +26,23 @@ class IsDirector(BasePermission):
 
     def has_permission(self, request, view):
         user = request.user
-        staff = Staff.objects.get(user=user)
-        if staff.position == "director":
-            return True
+        if user.pk:
+            staff = Staff.objects.get(user=user)
+            if staff.position == "director":
+                return True
+        else:
+            return False
 
 class IsAdminorIsAccountant(BasePermission):
 
     def has_permission(self, request, view):
         user = request.user
-        staff = Staff.objects.get(user=user)
-        if staff.position == "accountant" or user.is_staff:
-            return True
+        if user.pk:
+            staff = Staff.objects.get(user=user)
+            if staff.position == "accountant" or user.is_staff:
+                return True
+        else:
+            return False
 
 class PermissionMixinAdmin:
     def get_permissions(self):

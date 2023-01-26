@@ -218,12 +218,12 @@ class Staff(models.Model):
         verbose_name_plural = "Staff"
 
 class StaffContactInfo(models.Model):
-    staff = models.OneToOneField(
-        Staff,
+    user = models.OneToOneField(
+        User,
         on_delete=models.CASCADE,
         related_name="staff_contact_info",
-        blank=False,
-        null=False,
+        blank=True,
+        null=True,
         verbose_name="staff"
     )
     birthplace=models.TextField(
@@ -265,7 +265,7 @@ class StaffContactInfo(models.Model):
         verbose_name="inn"
     )
     def __str__(self):
-        return f"{self.first_name} {self.last_name} - {self.specialty}"
+        return f"{self.user} {self.email}"
 
     class Meta:
         verbose_name = "Staff's contact information"
