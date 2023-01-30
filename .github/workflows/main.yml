@@ -14,11 +14,15 @@ jobs:
     steps:
     
     
-      - name: cleanup
-        run : |
-          sudo chown -R $USER:$USER $GITHUB_WORKSPACE 
+      - name: 'Cleanup build folder'
+        run: |
+          ls -la ./
+          rm -rf ./* || true
+          rm -rf ./.??* || true
+          ls -la ./
 
 #       - uses: AutoModality/action-clean@v1   
+
       - uses: actions/checkout@v2
     
       - name: Stop buh-control_web_1 container
