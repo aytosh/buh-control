@@ -14,9 +14,9 @@ jobs:
     steps:
 
 
-      - name: cleanup
-        run : |
-          sudo chown -R $USER:$USER $GITHUB_WORKSPACE  
+#       - name: cleanup
+#         run : |
+#           sudo chown -R $USER:$USER $GITHUB_WORKSPACE  
 
       - uses: actions/checkout@v2
     
