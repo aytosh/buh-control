@@ -12,29 +12,18 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    
-    
-#       - name: cleanup
-#         run : |
-#           sudo chown -R $USER:$USER $GITHUB_WORKSPACE 
+ 
 
-      - uses: AutoModality/action-clean@v1   
       - uses: actions/checkout@v2
     
       - name: Stop buh-control_web_1 container
         run: | 
             docker stop buh-control_web_1
-      - name: Stop buh-control_db_1 container
-        run: | 
-           docker stop buh-control_db_1
           
       - name: Delete buh-control_web_1 container
         run: |
           docker rm buh-control_web_1
           
-      - name: Delete buh-control_db_1 container
-        run: |
-           docker rm buh-control_db_1
             
       - name: Makemigrations
         run: |
@@ -48,9 +37,6 @@ jobs:
         run: |
           docker-compose run web python3 manage.py collectstatic 
           
-#       - name: Createsuperuser
-#         run: |
-#           docker-compose run web python3 manage.py createsuperuser --noinput 
           
       - name: Run Docker-Compose
         run: |
