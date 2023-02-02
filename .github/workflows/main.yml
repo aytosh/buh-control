@@ -13,6 +13,7 @@ jobs:
 
     steps:
  
+      - uses: AutoModality/action-clean@v1   
 
       - uses: actions/checkout@v2
     
