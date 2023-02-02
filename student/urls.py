@@ -5,7 +5,7 @@ from .views import *
 
 router = DefaultRouter()
 router.register(r'student', StudentViewset)
-router.register(r'family_member', FamilyMemberViewset)
+router.register(r'family_members', FamilyMemberViewset)
 
 urlpatterns = [
     path('', include(router.urls)),
