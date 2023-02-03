@@ -13,8 +13,6 @@ jobs:
 
     steps:
  
-      - uses: AutoModality/action-clean@v1   
-
       - uses: actions/checkout@v2
     
       - name: Stop buh-control_web_1 container
