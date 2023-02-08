@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+from .exceptions import CustomException
 
 class DiscountSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,7 +22,7 @@ class FeeSerializer(serializers.ModelSerializer):
         if fee.count_payment():
             return fee
         else:
-            raise serializers.ValidationError("please fill out required fields!")
+            raise CustomException
 
 
     def to_representation(self, instance):
@@ -56,4 +57,4 @@ class PaymentSerializer(serializers.ModelSerializer):
         if payment.count_payment():
             return payment
         else:
-            raise serializers.ValidationError("please fill out required fields!")
+            raise CustomException

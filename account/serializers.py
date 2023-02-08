@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model, authenticate
 from django.core.mail import send_mail
-
+from .exceptions import AccountException
 from rest_framework import serializers
 
 User = get_user_model()
@@ -68,7 +68,7 @@ class LoginSerializer(serializers.Serializer):
 
     def validate_username(self, username):
         if not User.objects.filter(username=username).exists():
-            raise serializers.ValidationError('User have not signed up')
+            raise AccountException
         return username
 
     def validate(self, attrs):
@@ -78,9 +78,9 @@ class LoginSerializer(serializers.Serializer):
         if username and password:
             user = authenticate(username=username, password=password, request=request)
             if not user:
-                raise serializers.ValidationError('Invalid username or password')
+                raise AccountException
         else:
-            raise serializers.ValidationError('Username and password required')
+            raise AccountException
         attrs['user'] = user
         return attrs
 

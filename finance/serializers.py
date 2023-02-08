@@ -1,6 +1,6 @@
 from .models import *
 from rest_framework import serializers
-
+from fee.exceptions import CustomException
 class CashboxSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cashbox
@@ -32,7 +32,7 @@ class IncomeSerializer(serializers.ModelSerializer):
         if income.count_income():
             return income
         else:
-            raise serializers.ValidationError("please fill out required fields!")
+            raise CustomException
 
 
 
@@ -47,7 +47,7 @@ class ExpensesSerializer(serializers.ModelSerializer):
             return expenses
 
         else:
-            raise serializers.ValidationError("please fill out required fields!")
+            raise CustomException
 
 class AccrualSerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,7 +59,7 @@ class AccrualSerializer(serializers.ModelSerializer):
         if accrual.count_accrual():
             return accrual
         else:
-            raise serializers.ValidationError("please fill out required fields!")
+            raise CustomException
 
 
 class SalaryPaymentSerializer(serializers.ModelSerializer):
@@ -72,5 +72,5 @@ class SalaryPaymentSerializer(serializers.ModelSerializer):
         if salary_payment.count_salary():
             return salary_payment
         else:
-            raise serializers.ValidationError("please fill out required fields!")
+            raise CustomException
 
