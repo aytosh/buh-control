@@ -41,7 +41,7 @@ class Student(models.Model):
         blank=True, null=True,
         verbose_name="photo"
     )
-    class_id = models.ForeignKey(
+    group = models.ForeignKey(
         Class,
         on_delete=models.CASCADE,
         related_name='students',

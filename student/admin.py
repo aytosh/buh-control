@@ -6,9 +6,9 @@ class FamilyMemeberInLine(admin.TabularInline):
     fields = ()
     extra = 1
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'student_id', 'first_name', 'last_name', 'class_id', 'status')
-    list_display_link = ('student_id', 'first_name', 'last_name', 'class_id')
-    list_filter = ('class_id', 'status', 'gender')
+    list_display = ('pk', 'student_id', 'first_name', 'last_name', 'group', 'status')
+    list_display_link = ('student_id', 'first_name', 'last_name', 'group')
+    list_filter = ('group', 'status', 'gender')
     search_fields = ('student_id', 'first_name', 'last_name')
     inlines = [
         FamilyMemeberInLine
