@@ -37,9 +37,12 @@ class IsAdminorIsAccountant(BasePermission):
 
     def has_permission(self, request, view):
         user = request.user
-        if user.pk:
+        if user.is_staff:
+            return True
+
+        elif user.pk:
             staff = Staff.objects.get(user=user)
-            if staff.position == "accountant" or user.is_staff:
+            if staff.position == "accountant":
                 return True
         else:
             return False
