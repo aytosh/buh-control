@@ -29,20 +29,31 @@ class StudentViewset(PermissionMixinAdminAccountant, viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         user = request.user
-        staff = Staff.objects.get(user=user)
-        if staff.position == "staff":
-            class_id = staff.class_id
-            q = Student.objects.filter(class_id=class_id)
-            queryset = self.filter_queryset(q)
-        elif staff.position in ["director", "accountant"] or user.is_staff:
-            queryset = self.filter_queryset(self.get_queryset())
-        else:
-            return Response("you dont have access!")
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = StudentReadSerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+        if not user.is_staff:
+            staff = Staff.objects.get(user=user)
+            if staff.position == "staff":
+                class_id = staff.class_id
+                q = Student.objects.filter(class_id=class_id)
+                queryset = self.filter_queryset(q)
+            elif staff.position in ["director", "accountant"] or user.is_staff:
+                queryset = self.filter_queryset(self.get_queryset())
+            else:
+                return Response("you dont have access!")
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = StudentReadSerializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
 
-        serializer = StudentReadSerializer(queryset, many=True)
-        return Response(serializer.data)
+            serializer = StudentReadSerializer(queryset, many=True)
+            return Response(serializer.data)
+        else:
+            queryset = self.filter_queryset(self.get_queryset())
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = StudentReadSerializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = StudentReadSerializer(queryset, many=True)
+            return Response(serializer.data)
+
 
