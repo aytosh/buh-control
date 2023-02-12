@@ -8,7 +8,6 @@ class ClassTitleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 class StudentSerializer(serializers.ModelSerializer):
     student_id = serializers.ReadOnlyField()
-    group = ClassTitleSerializer(many=False)
     class Meta:
         model = Student
         fields = '__all__'
@@ -17,6 +16,14 @@ class StudentSerializer(serializers.ModelSerializer):
         student.create_student_id()
         student.save()
         return student
+
+class StudentReadSerializer(serializers.ModelSerializer):
+    student_id = serializers.ReadOnlyField()
+    group = ClassTitleSerializer(many=False, read_only=True)
+    class Meta:
+        model = Student
+        fields = '__all__'
+
 
 class FamilyMemberSerializer(serializers.ModelSerializer):
     class Meta:

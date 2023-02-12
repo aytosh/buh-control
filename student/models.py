@@ -65,7 +65,7 @@ class Student(models.Model):
         today = datetime.date.today()
         year = today.year
         year = str(year)[2::]
-        class_title = self.class_id.class_category.title
+        class_title = self.group.class_category.title
         if class_title in ["русский", "нулевой", "russian", "nulevoy"]:
             lang = "2"
         elif class_title in ["кыргызский", "kyrgyz"]:
