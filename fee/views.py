@@ -12,7 +12,7 @@ class DiscountViewset(PermissionMixinAdmin, viewsets.ModelViewSet):
 class FeeCategoryViewset(PermissionMixinAdmin, viewsets.ModelViewSet):
     serializer_class = FeeCategorySerializer
     queryset = FeeCategory.objects.all()
-
+ 
 
 class FeeViewset(PermissionMixinAdminAccountant, viewsets.ModelViewSet):
     serializer_class = FeeSerializer
